@@ -1,27 +1,30 @@
 # Sentinel – Identity Governance & External Cloud Automation
 
-A robust **Salesforce security automation suite** that enforces **Zero-Trust** principles through intelligent user lifecycle management and secure cross-cloud immutable audit log archiving.
+A powerful **Salesforce Zero-Trust Identity Governance** solution that automates user lifecycle management, proactive expiry notifications, and secure audit archiving to Google Drive.
 
-This solution automates critical identity governance processes and provides seamless integration with Google Drive — all while significantly reducing manual security overhead.
+This application runs daily to identify users with upcoming or immediate access expiry, automates deactivation, sends personalized notifications, and enables managers to perform bulk security actions through an intuitive Experience Site interface.
 
-![Sentinel - Identity Governance & External Cloud Automation](https://capsule-render.vercel.app/api?type=soft&color=1E3A8A,3B82F6&height=280&section=header&text=Sentinel%20-%20Identity%20Governance&desc=Zero-Trust%20Automation%20%7C%20Google%20Drive%20Integration%20%7C%20LWC%20Explorer&fontSize=36&fontAlignY=48&descAlignY=68&fontColor=ffffff)
+![Sentinel - Identity Governance & External Cloud Automation](https://capsule-render.vercel.app/api?type=soft&color=1E3A8A,3B82F6&height=280&section=header&text=Sentinel%20-%20Identity%20Governance&desc=Zero-Trust%20Automation%20%7C%20Daily%20Batch%20%7C%20Google%20Drive%20Archiving&fontSize=36&fontAlignY=48&descAlignY=68&fontColor=ffffff)
 
-This project demonstrates enterprise-grade security automation, secure external integrations, and real-time visibility within the Salesforce platform.
+Built with a strong focus on security, automation, compliance, and user experience on **Salesforce Experience Cloud**.
 
 ## ✨ Key Features
 
-- **Zero-Trust Identity Governance** – Automated user lifecycle management with intelligent deactivation
-- **Secure OAuth 2.0 Integration** – Salesforce to Google Drive bridge using Named Credentials
-- **Real-time LWC File Explorer** – Browse Google Drive files directly inside Salesforce UI
-- **Immutable Audit Log Vault** – Automated monthly backups using Batch Apex
-- **Production-Ready Security** – Built with best practices for guest/internal users and compliance
+- **Daily Automated User Lifecycle Management** – Identifies users expiring today and in next 15 days
+- **Smart Deactivation Logic** – Automatically deactivates expired users + creates audit logs
+- **Proactive Email Notifications** – Customized emails sent to users and managers for upcoming expiries
+- **Manager Self-Service Portal** – Intuitive Experience Site interface for bulk security operations
+- **Bulk Security Actions** – Password Reset, Reset MFA, Deactivate, and Backup & Purge
+- **Automated Audit Archiving** – Secure backup of user permissions to Google Drive as CSV files
+- **Real-time LWC File Explorer** – View archived CSV files directly in Salesforce without leaving the platform
 
 ## 🚀 Business Impact
 
-- Automated monthly security audit process
-- Reduced manual IT overhead by **10+ hours per month**
-- Eliminated risks from stale user access
-- Strengthened overall **Zero-Trust** security posture
+- Automated daily security hygiene process
+- Reduced manual IT and manager overhead significantly
+- Strengthened **Zero-Trust** security posture by timely deactivation of access
+- Enabled faster user re-onboarding through permission set backup & restore
+- Eliminated risk of stale user accounts lingering in the system
 
 ## ▶️ Watch Demo
 > **YouTube**: I will update soon ......
@@ -30,23 +33,35 @@ This project demonstrates enterprise-grade security automation, secure external 
 
 - **Apex** • **Batch Apex** • **Triggers**
 - **LWC** • **Custom Metadata Types**
-- **Email Templates** • **Configuration**
-- **Security** • **Named Credentials** • **OAuth 2.0**
-- **Integration** • **Google Drive API**
+- **Email Templates** • **Experience Cloud (LWR)**
+- **Named Credentials** • **OAuth 2.0** • **Google Drive API**
+- **Security** • **Integration** • **CSV Generation**
 
 ## 📋 Project Highlights
 
-### Identity Governance
-Engineered a comprehensive security suite that automates the entire user lifecycle, achieving a **"Zero-Trust"** posture through smart Batch Apex deactivation logic.
+### Automated Identity Governance
+- Daily Batch Apex job picks users whose access end date is **today** or **today + 15 days**
+- Automatically deactivates users expiring today
+- Creates detailed audit logs in a custom object
+- Sends personalized deactivation emails to affected users
 
-### Salesforce-to-Cloud Integration
-Architected a secure OAuth 2.0 bridge between Salesforce and Google Drive using **Named Credentials** to automate streaming of immutable audit log backups.
+### Proactive Expiry Management
+- Sends advance warning emails to users whose access will expire in the next 15 days
+- Helps managers take proactive action before access is revoked
 
-### Integrated Archive Vault
-Developed a real-time **Lightning Web Component (LWC)** file explorer that fetches and displays Google Drive content directly within the Salesforce UI — completely eliminating context switching for administrators.
+### Manager Self-Service Interface
+- Built on **Experience Cloud** for managers
+- Multi-select capability to choose multiple users
+- Bulk actions: **Password Reset**, **Reset MFA**, **Deactivate**, and **Backup & Purge**
+- "Backup & Purge" generates CSV with User Full Name, Email, Permission Set Name & Label for future re-onboarding
 
-### Enterprise Delivery
-Delivered a scalable, secure, and maintainable solution following Salesforce security and performance best practices.
+### Secure Archive Vault
+- CSV files are automatically uploaded to a dedicated Google Drive folder using Named Credentials
+- Real-time LWC component to browse and refresh archived files directly inside Salesforce
+- Folder ID and integration settings managed via Custom Metadata for easy configuration
+
+### Smart License Management
+- License removal not handled in batch — Salesforce automatically releases licenses upon user deactivation
 
 ## 📁 Project Structure
 
@@ -55,13 +70,12 @@ Sentinel-Identity-Governance/
 ├── force-app/
 │   ├── main/
 │   │   ├── default/
-│   │   │   ├── classes/               # Apex Services, Controllers & Batch Classes
-│   │   │   ├── triggers/              # Security & User lifecycle triggers
-│   │   │   ├── lwc/                   # Real-time Google Drive File Explorer LWC
-│   │   │   ├── customMetadata/        # Configuration via Custom Metadata
-│   │   │   ├── email/                 # Email Templates for notifications
-│   │   │   ├── namedCredentials/      # OAuth 2.0 configuration
-│   │   │   ├── integrations/          # External Service definitions
+│   │   │   ├── classes/               # Batch Class, Service Layer, Controller, CSV Generator
+│   │   │   ├── triggers/              # User & Audit logging triggers
+│   │   │   ├── lwc/                   # Manager Portal + Google Drive File Explorer
+│   │   │   ├── customMetadata/        # Configuration (Folder ID, Named Credentials)
+│   │   │   ├── email/                 # Custom Email Templates
+│   │   │   ├── experiences/           # Experience Cloud Site configuration
 │   │   │   └── security/              # Permission Sets & Profiles
 │   └── ...
 ├── screenshots/
@@ -69,87 +83,87 @@ Sentinel-Identity-Governance/
 
 📸 Screenshots
 
-Sentinel Dashboard / Overview
-<img src="screenshots/dashboard.png" alt="Dashboard">
-Real-time LWC Google Drive File Explorer
-<img src="screenshots/file-explorer.png" alt="LWC File Explorer">
-Batch Apex Automation & Scheduling
-<img src="screenshots/batch-apex.png" alt="Batch Apex">
-User Lifecycle & Deactivation Logic
-<img src="screenshots/user-lifecycle.png" alt="Identity Governance">
-Email Notification Templates
-<img src="screenshots/email-template.png" alt="Email Templates">
-Configuration via Custom Metadata
-<img src="screenshots/custom-metadata.png" alt="Custom Metadata">
+Manager Portal Dashboard
+<img src="screenshots/dashboard.png" alt="Manager Dashboard">
+Multi-Select User Interface with Bulk Actions
+<img src="screenshots/bulk-actions.png" alt="Bulk Actions">
+Real-time LWC Google Drive Archive Explorer
+<img src="screenshots/file-explorer.png" alt="Archive Vault">
+Daily Batch Execution & Audit Logs
+<img src="screenshots/batch-logs.png" alt="Batch & Audit Logs">
+Email Templates (Deactivation & Reminder)
+<img src="screenshots/email-templates.png" alt="Email Templates">
+Custom Metadata Configuration
+<img src="screenshots/custom-metadata.png" alt="Configuration">
 
 📱✨ Mobile View
 
-Dashboard & File Explorer (Mobile)
+Manager Portal & Bulk Actions (Mobile)
 <img src="screenshots/mobile1.png" alt="Mobile View 1">
-Configuration & Audit Logs (Mobile)
+Archive Explorer & Refresh (Mobile)
 <img src="screenshots/mobile2.png" alt="Mobile View 2">
 
 🏗️ Architecture Highlights
 
+      ⚙️ Daily Batch Automation
+      
+        Processes today's and upcoming expiries
+        Automated deactivation + audit logging
+        Personalized email notifications
+      
+    
       🔐 Zero-Trust Security
       
-        Automated user deactivation logic
-        Prevention of stale access risks
-        Secure external integration patterns
+        Timely access revocation
+        Secure Named Credentials integration
+        Audit trail for compliance
       
     
-      ☁️ Secure Cloud Integration
+      👥 Manager Self-Service
       
-        Named Credentials + OAuth 2.0
-        Immutable audit log archiving
-        Governor limit safe Batch Apex
-      
-    
-      ⚡ Real-time LWC
-      
-        High-performance file explorer
-        Seamless user experience
-        No context switching required
+        Multi-select bulk operations
+        Conditional button enabling logic
+        Permission Set Backup as CSV
       
     
-      📋 Metadata-Driven
+      ☁️ Secure Google Drive Archiving
       
-        Easy configuration & maintenance
-        Flexible business rules
-        Minimal code changes required
+        Real-time LWC file explorer
+        Refresh functionality from Drive folder
+        Metadata-driven configuration
       
     
 🎯 Architect Skills Demonstrated
 
       
-        Identity & Access Management
-Zero-Trust automation at scale
-        Secure External Integrations
-Named Credentials & OAuth 2.0
+        Batch Apex & Automation
+Complex daily scheduled processing
+        Identity Governance & Zero-Trust
+End-to-end user lifecycle automation
       
     
       
-        Batch Processing & Automation
-Complex business logic with Batch Apex
-        Enterprise Security Design
-Compliance-focused architecture
+        Secure External Integration
+OAuth 2.0 + Named Credentials with Google Drive
+        Experience Cloud Development
+Manager self-service portal on LWR
       
     
 🔮 Planned Enhancements
 
-Real-time Slack/Email alerts for critical security events
-Automated compliance & audit reporting dashboard
-Support for additional cloud storage (OneDrive, AWS S3)
-Advanced access review workflow with approval process
+Real-time Slack notifications for critical actions
+Automated compliance reporting dashboard
+One-click Restore from Backup CSV
+Support for additional cloud storage providers
 
 🚀 Deployment Steps
 
 Clone the repository
 Authenticate to your Salesforce org
 Deploy the source using Salesforce CLI
-Configure Named Credentials for Google Drive
-Set up Custom Metadata records
-Schedule the Batch Apex job
+Configure Named Credentials and Custom Metadata
+Set up the Experience Cloud site
+Schedule the Daily Batch Apex job
 
 Bashgit clone https://github.com/Venkat152/Sentinel-Identity-Governance.git
 cd Sentinel-Identity-Governance
