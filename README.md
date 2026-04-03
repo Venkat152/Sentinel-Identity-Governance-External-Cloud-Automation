@@ -1,32 +1,38 @@
 # Sentinel – Identity Governance & External Cloud Automation
 
-A robust **Salesforce Zero-Trust Identity Governance** solution that automates daily user lifecycle management, proactive access expiry notifications, secure permission set backups, and immutable audit archiving to Google Drive.
+![Sentinel Banner](https://capsule-render.vercel.app/api?type=rect&color=0:111827,50:1e3a8a,100:3b82f6&height=240&section=header&text=Sentinel%20Identity%20Governance&fontSize=42&fontColor=ffffff&fontAlignY=36&desc=Batch%20Apex%20%7C%20Queueable%20%7C%20Google%20Drive%20Integration%20%7C%20LWR%20Portal&descSize=18&descAlignY=60&animation=twinkling)
 
-This application runs a daily batch process to identify users with expiring access, automates deactivation, sends personalized emails, and provides a manager self-service portal on **Experience Cloud** for bulk security operations. All features are built with strong focus on security, compliance, and maintainability.
+## Problem & Solution
 
-![Sentinel - Identity Governance & External Cloud Automation](https://capsule-render.vercel.app/api?type=soft&color=1E3A8A,3B82F6&height=280&section=header&text=Sentinel%20-%20Identity%20Governance&desc=Zero-Trust%20Automation%20%7C%20Daily%20Batch%20%7C%20Google%20Drive%20Archiving&fontSize=36&fontAlignY=48&descAlignY=68&fontColor=ffffff)
+**Problem:**  
+Managing user access lifecycle in large Salesforce orgs is manual, error-prone, and risky. Inactive or expired users often retain access and licenses, leading to security vulnerabilities, compliance issues, and unnecessary costs. Managers waste hours performing repetitive tasks like password resets, MFA resets, deactivation, and permission set backups.
 
-**Deployed on Experience Cloud** for easy demonstration to recruiters and guest users.
+**Solution:**  
+Built **Sentinel** — a full **Zero-Trust Identity Governance** automation suite. A daily Batch Apex job intelligently identifies users expiring today or in the next 15 days, automates deactivation, logs audits, and sends personalized emails. Managers get a clean **Experience Cloud (LWR)** self-service portal with multi-select bulk actions and secure Google Drive archiving of permission sets for fast re-onboarding.
+
+**Key Technical Highlight:** Handled complex **Mixed DML Exceptions** (Setup vs Non-Setup objects) using **Queueable Apex** for reliable transaction management.
+
+**Deployed on Experience Cloud** — ready for live demo to recruiters and guest users.
 
 ## ✨ Key Features
 
-- **Daily Automated Lifecycle Management** – Picks users with access end date = today or today + 15 days
+- **Daily Automated Lifecycle Management** – Identifies users with access end date = today or today + 15 days
 - **Smart Deactivation Engine** – Auto-deactivates expired users, creates audit logs, and sends customized emails
-- **Proactive Notifications** – Advance warning emails for users expiring in next 15 days
-- **Manager Self-Service Portal** – Built on Experience Cloud with multi-select bulk actions
+- **Proactive Notifications** – Advance warning emails for upcoming expiries
+- **Manager Self-Service Portal** – Built on Experience Cloud with multi-select datatable
 - **Bulk Security Operations** – Password Reset, Reset MFA, Deactivate, and Backup & Purge
-- **Intelligent Backup & Purge** – Removes assigned Permission Sets and archives them as CSV to Google Drive for future re-onboarding
-- **Real-time Archive Explorer** – LWC component to browse and refresh backed-up CSV files from Google Drive
-- **Manual Batch Execution** – Interface to trigger the batch job on-demand
-- **Conditional UI Logic** – Action buttons enabled only when valid users are selected
+- **Intelligent Backup & Purge** – Removes assigned Permission Sets and archives them as CSV (User Full Name, Email, Permission Set Name & Label) to Google Drive
+- **Real-time Archive Explorer** – LWC component with Refresh button to view backed-up files from Google Drive
+- **Manual Batch Trigger** – Interface to run the batch job on-demand
+- **Conditional UI Logic** – Action buttons enabled only when valid active users are selected
 
 ## 🚀 Business Impact
 
 - Automated daily security hygiene process
-- Significantly reduced manual effort for IT and managers
-- Strengthened **Zero-Trust** security by timely revocation of access
-- Enabled faster user re-onboarding using backed-up Permission Sets
-- Eliminated risk of stale accounts and unnecessary license consumption
+- Significantly reduced manual effort for IT teams and managers
+- Strengthened **Zero-Trust** security posture through timely access revocation
+- Enabled faster user re-onboarding using permission set backups
+- Eliminated risk of stale accounts and unnecessary license usage
 
 ## ▶️ Watch Demo
 > **YouTube**: I will update soon ......
@@ -42,29 +48,27 @@ This application runs a daily batch process to identify users with expiring acce
 ## 📋 Project Highlights
 
 ### Automated Identity Governance
-- Daily Batch Apex identifies users expiring **today** and in the **next 15 days**
-- Automatically deactivates users whose access ends today
-- Creates detailed audit records in a custom object
-- Sends personalized deactivation and reminder emails using custom Email Templates
+- Daily Batch Apex processes users expiring today and in the next 15 days
+- Auto-deactivates expired users + creates audit records in custom object
+- Sends personalized deactivation and reminder emails
 
 ### Manager Self-Service Interface (Experience Cloud)
-- Multi-select datatable for managers to choose users
-- Bulk actions: **Password Reset**, **Reset MFA**, **Deactivate**, and **Backup & Purge**
-- Conditional button enabling – “Reset MFA”, “Password Reset”, and “Deactivate” buttons are enabled only when at least one **active** user is selected
-- **Backup & Purge** functionality removes assigned Permission Sets and generates a CSV containing User Full Name, Email, Permission Set Name, and Label
+- Multi-select interface for bulk actions
+- Conditional button logic for **Password Reset**, **Reset MFA**, and **Deactivate**
+- **Backup & Purge** removes Permission Sets and generates CSV for future restoration
 
 ### Secure Google Drive Archiving
-- CSV backup files are uploaded to a dedicated Google Drive folder via Named Credentials
-- Real-time LWC File Explorer in the **Archive** tab with a **Refresh** button to fetch latest files
-- Folder ID and integration settings managed through Custom Metadata for easy configuration
+- CSV files uploaded securely using Named Credentials
+- Real-time LWC File Explorer in Archive tab with Refresh functionality
+- Configuration (Folder ID, endpoint) managed via Custom Metadata
 
 ### Technical Challenges Overcome
-- Handled **Mixed DML Exception** (Setup vs Non-Setup objects) by using **Queueable Apex** to separate transactions
-- Implemented secure external integration best practices with Named Credentials and OAuth 2.0
-- Ensured governor limit safety in Batch and Queueable processing
+- Resolved **Mixed DML Exception** by offloading non-setup operations to **Queueable Apex**
+- Ensured governor limit safety across Batch and Queueable jobs
+- Implemented secure, maintainable external integration best practices
 
 ### Smart License Handling
-- License removal is not explicitly coded — Salesforce automatically releases licenses when a user is deactivated
+- No explicit license removal logic — Salesforce automatically releases licenses on user deactivation
 
 ## 📁 Project Structure
 
