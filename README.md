@@ -106,25 +106,23 @@ Manager Portal & Bulk Actions (Mobile)
 Archive Explorer & Refresh (Mobile)
 <img src="screenshots/mobile2.png" alt="Mobile View 2">
 
-<div align="center">
-
-<h2>🏗️ Architecture Highlights</h2>
+<h2 align="left">🏗️ Architecture Highlights</h2>
 
 <table>
   <tr>
-    <td align="center" valign="top" width="50%">
-      <h3>⚙️ Daily Batch & Queueable</h3>
-      <p><i>Governor-safe automation</i></p>
-      <ul align="left">
+    <td valign="top" width="50%">
+      <h3 align="left">⚙️ Daily Batch & Queueable</h3>
+      <p align="left"><i>Governor-safe automation</i></p>
+      <ul>
         <li>Processes today and next 15 days expiries</li>
         <li>Automated deactivation + audit logging</li>
         <li><b>Queueable Apex</b> to handle Mixed DML</li>
       </ul>
     </td>
-    <td align="center" valign="top" width="50%">
-      <h3>🔐 Zero-Trust Security</h3>
-      <p><i>Compliance ready</i></p>
-      <ul align="left">
+    <td valign="top" width="50%">
+      <h3 align="left">🔐 Zero-Trust Security</h3>
+      <p align="left"><i>Compliance ready</i></p>
+      <ul>
         <li>Timely access revocation</li>
         <li>Secure Named Credentials + <b>OAuth 2.0</b></li>
         <li>Full audit trail for compliance</li>
@@ -132,19 +130,19 @@ Archive Explorer & Refresh (Mobile)
     </td>
   </tr>
   <tr>
-    <td align="center" valign="top" width="50%">
-      <h3>👥 Manager Self-Service</h3>
-      <p><i>Bulk operations portal</i></p>
-      <ul align="left">
+    <td valign="top" width="50%">
+      <h3 align="left">👥 Manager Self-Service</h3>
+      <p align="left"><i>Bulk operations portal</i></p>
+      <ul>
         <li>Multi-select with conditional UI logic</li>
         <li>Backup &amp; Purge with CSV generation</li>
         <li>Permission Set removal + archiving</li>
       </ul>
     </td>
-    <td align="center" valign="top" width="50%">
-      <h3>☁️ Secure Archiving</h3>
-      <p><i>Google Drive integration</i></p>
-      <ul align="left">
+    <td valign="top" width="50%">
+      <h3 align="left">☁️ Secure Archiving</h3>
+      <p align="left"><i>Google Drive integration</i></p>
+      <ul>
         <li>Real-time LWC Google Drive explorer</li>
         <li>Refresh functionality from Drive folder</li>
         <li>Metadata-driven configuration</li>
@@ -155,51 +153,47 @@ Archive Explorer & Refresh (Mobile)
 
 <br>
 
-<h2>🎯 Architect Skills Demonstrated</h2>
+<h2 align="left">🎯 Architect Skills Demonstrated</h2>
 
 <table>
   <tr>
-    <td align="center" valign="top" width="50%">
-      <h3>Batch Apex &amp; Queueable</h3>
-      <p>Complex scheduled processing &amp; <b>Mixed DML handling</b></p>
+    <td valign="top" width="50%">
+      <h3 align="left">Batch Apex &amp; Queueable</h3>
+      <p align="left">Complex scheduled processing &amp; <b>Mixed DML handling</b></p>
     </td>
-    <td align="center" valign="top" width="50%">
-      <h3>Identity Governance &amp; Zero-Trust</h3>
-      <p>End-to-end automated user lifecycle</p>
+    <td valign="top" width="50%">
+      <h3 align="left">Identity Governance &amp; Zero-Trust</h3>
+      <p align="left">End-to-end automated user lifecycle</p>
     </td>
   </tr>
   <tr>
-    <td align="center" valign="top" width="50%">
-      <h3>Secure External Integration</h3>
-      <p><b>OAuth 2.0</b> + Named Credentials with Google Drive</p>
+    <td valign="top" width="50%">
+      <h3 align="left">Secure External Integration</h3>
+      <p align="left"><b>OAuth 2.0</b> + Named Credentials with Google Drive</p>
     </td>
-    <td align="center" valign="top" width="50%">
-      <h3>Experience Cloud (LWR)</h3>
-      <p>Manager self-service portal for guest/demo users</p>
+    <td valign="top" width="50%">
+      <h3 align="left">Experience Cloud (LWR)</h3>
+      <p align="left">Manager self-service portal for guest/demo users</p>
     </td>
   </tr>
 </table>
 
 <br>
 
-<h2>🔮 Planned Enhancements</h2>
+<h2 align="left">🔮 Planned Enhancements</h2>
 
-<table>
-  <tr>
-    <td align="center">Real-time Slack/Email alerts</td>
-    <td align="center">One-click Restore functionality</td>
-  </tr>
-  <tr>
-    <td align="center">Compliance reporting dashboard</td>
-    <td align="center">Multi-cloud storage support</td>
-  </tr>
-</table>
+<ul>
+  <li>Real-time Slack/Email alerts for critical security events</li>
+  <li>One-click Restore functionality from backup CSV</li>
+  <li>Automated compliance reporting dashboard</li>
+  <li>Support for additional cloud storage providers</li>
+</ul>
 
 <br>
 
-<h2>🚀 Deployment Steps</h2>
+<h2 align="left">🚀 Deployment Steps</h2>
 
-<ol align="left">
+<ol>
   <li>Clone the repository</li>
   <li>Authenticate to your Salesforce org</li>
   <li>Deploy the source using Salesforce CLI</li>
@@ -215,13 +209,9 @@ sf org login web --alias sentinel
 sf project deploy start
 ```
 
-<br>
+<h2 align="left">👨‍💻 Author</h2>
 
-<h2>👨‍💻 Author</h2>
-
-<p>
+<p align="left">
   <b>Venkatesh M</b><br>
   Salesforce Developer | Capgemini | India
 </p>
-
-</div>
