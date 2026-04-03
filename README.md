@@ -83,7 +83,8 @@ Sentinel-Identity-Governance/
 │   └── ...
 ├── screenshots/
 └── README.md
-📸 Screenshots
+```
+## 📸 Screenshots
 
 Manager Portal Dashboard with Multi-Select
 <img src="screenshots/dashboard.png" alt="Manager Dashboard">
