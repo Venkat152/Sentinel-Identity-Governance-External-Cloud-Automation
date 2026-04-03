@@ -127,10 +127,6 @@ public with sharing class UsersDeactivationAndNotificationBatch implements Datab
             email.setTargetObjectId(u.Id);
             email.setSaveAsActivity(false);
             email.setWhatId(u.Id);
-            
-            // if (userIdToManagerEmail.containsKey(u.Id)) {
-            //     email.setCcAddresses(new List<String>{ userIdToManagerEmail.get(u.Id) });
-            // }
 
             if (String.isNotBlank(owaId)) {
                 email.setOrgWideEmailAddressId(owaId);

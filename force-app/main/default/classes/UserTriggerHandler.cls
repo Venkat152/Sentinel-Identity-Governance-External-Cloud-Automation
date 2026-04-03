@@ -25,7 +25,6 @@ public with sharing class UserTriggerHandler {
      */
         public static void handleAfterUpdate(List<User> newList, Map<Id, User> oldMap) {
             List<Id> deactivatedUserIds = new List<Id>();
-
             // 1. Only identify users deactivated manually
             for (User u : newList) {
                 User oldUser = oldMap.get(u.Id);
@@ -33,8 +32,6 @@ public with sharing class UserTriggerHandler {
                     deactivatedUserIds.add(u.Id);
                 }
             }
-
-            // 2. THE GUARD: Do not enqueue if we are in a Batch context 
             // (Because the Batch method above is already handling the Queueable)
             if (!deactivatedUserIds.isEmpty() && !System.isBatch()) {
                 System.enqueueJob(new SentinelGovernanceQueueable(deactivatedUserIds, new List<Access_Audit_Log__c>(), 'Manual Deactivation'));

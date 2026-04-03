@@ -79,30 +79,37 @@ public static void performCredentialReset(List<Id> userIds, String resetType) {
     List<Access_Audit_Log__c> auditLogs = new List<Access_Audit_Log__c>();
     String notes = 'Manual action triggered via Manager Governance Portal.';
 
+    // 1. PERFORM SETUP OPERATIONS (User Update, MFA, Password)
     for (Id uId : userIds) {
         if (resetType == 'Password') {
             System.resetPassword(uId, true);
             auditLogs.add(createLogRecord(uId, 'Password Reset', notes));
         } 
         else if (resetType == 'MFA') {
-            // MFA Reset Logic
-            auditLogs.add(createLogRecord(uId, 'MFA Reset', notes));
+            try {
+                System.UserManagement.deregisterVerificationMethod(uId, Auth.VerificationMethod.SALESFORCE_AUTHENTICATOR);
+                System.UserManagement.deregisterVerificationMethod(uId, Auth.VerificationMethod.SMS);
+                System.UserManagement.deregisterVerificationMethod(uId, Auth.VerificationMethod.U2F);
+                auditLogs.add(createLogRecord(uId, 'MFA Reset', 'MFA Methods Deregistered: ' + notes));
+            } catch (Exception e) {
+                System.debug('MFA Method removal skipped: ' + e.getMessage());
+            }
         }
         else if (resetType == 'Deactivate') {
-            // Manual Deactivation Logic
             usersToUpdate.add(new User(Id = uId, IsActive = false));
-            // The UserTrigger handles the actual Log creation for Deactivations
         }
     }
 
     if (!usersToUpdate.isEmpty()) {
-        update usersToUpdate;
+        update usersToUpdate; // This is a Setup DML
     }
+
+    // 2. ENQUEUE NON-SETUP OPERATIONS (Audit Logs)
+    // We send the logs to the Queueable to run in a NEW transaction context.
     if (!auditLogs.isEmpty()) {
-        insert auditLogs;
+        System.enqueueJob(new SentinelGovernanceQueueable(userIds, auditLogs, resetType));
     }
 }
-
     /**
      * Creates a standardized Audit Log record.
      * This can be called from Batch, Triggers, or LWC.
@@ -203,12 +210,7 @@ public static void sendDeactivationEmailsSync(List<Id> userIds,String actionType
             mail.setTargetObjectId(u.Id);
             mail.setSaveAsActivity(false);
             mail.setWhatId(u.Id);
-            
-            // CC Manager logic
-/* if (u.ManagerId != null && u.Manager.IsActive && String.isNotBlank(u.Manager.Email)) {
-    mail.setCcAddresses(new List<String>{ u.Manager.Email });
-}
-*/
+
             if (String.isNotBlank(owaId)) {
                 try {
                     mail.setOrgWideEmailAddressId(owaId);

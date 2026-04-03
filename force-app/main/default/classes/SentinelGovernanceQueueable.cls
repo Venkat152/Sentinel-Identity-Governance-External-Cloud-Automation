@@ -9,14 +9,28 @@ public class SentinelGovernanceQueueable implements System.Queueable {
         this.actionType = type;
     }
 
-    public void execute(System.QueueableContext context) {
-        // Handle Emails
-        if(deactivatedIds != null && !deactivatedIds.isEmpty()) {
+public void execute(System.QueueableContext context) {
+    // 1. Handle Emails First
+    if (deactivatedIds != null && !deactivatedIds.isEmpty()) {
+        try {
             IdentityGovernanceService.sendDeactivationEmailsSync(deactivatedIds, actionType);
-        }
-        // Handle Logs
-        if(pendingLogs != null && !pendingLogs.isEmpty()) {
-            insert pendingLogs;
+        } catch (Exception e) {
+            System.debug('Email processing failed: ' + e.getMessage());
         }
     }
+
+    // 2. Handle Logs with Partial Success Allowed
+    if (pendingLogs != null && !pendingLogs.isEmpty()) {
+        // allOrNone = false allows valid logs to insert even if some fail
+        Database.SaveResult[] results = Database.insert(pendingLogs, false);
+        
+        for (Database.SaveResult sr : results) {
+            if (!sr.isSuccess()) {
+                for(Database.Error err : sr.getErrors()) {
+                    System.debug('Log Insertion Error: ' + err.getMessage());
+                }
+            }
+        }
+    }
+}
 }
