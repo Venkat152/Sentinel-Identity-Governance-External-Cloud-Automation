@@ -116,7 +116,6 @@ Archive Explorer & Refresh (Mobile)
   <h3 style="display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: #58a6ff; margin: 0 0 28px 0; padding-bottom: 16px; border-bottom: 2px solid #30363d; text-shadow: 0 2px 4px rgba(88,166,255,0.2);">🏗️ Architecture Highlights</h3>
   
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-    
     <!-- Card 1: Daily Batch -->
     <div style="background: linear-gradient(145deg, #161b22, #1a1e24); border: 1px solid #21262d; border-radius: 16px; padding: 24px; transition: all 0.3s ease; position: relative; overflow: hidden;">
       <div style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #10b981, #34d399);"></div>
@@ -133,7 +132,6 @@ Archive Explorer & Refresh (Mobile)
         <li><strong>Queueable Apex</strong> to handle Mixed DML</li>
       </ul>
     </div>
-
     <!-- Card 2: Zero-Trust Security -->
     <div style="background: linear-gradient(145deg, #161b22, #1a1e24); border: 1px solid #21262d; border-radius: 16px; padding: 24px; transition: all 0.3s ease; position: relative; overflow: hidden;">
       <div style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #ef4444, #f87171);"></div>
@@ -150,7 +148,6 @@ Archive Explorer & Refresh (Mobile)
         <li>Full audit trail for compliance</li>
       </ul>
     </div>
-
     <!-- Card 3: Manager Self-Service -->
     <div style="background: linear-gradient(145deg, #161b22, #1a1e24); border: 1px solid #21262d; border-radius: 16px; padding: 24px; transition: all 0.3s ease; position: relative; overflow: hidden;">
       <div style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #f59e0b, #fbbf24);"></div>
@@ -167,7 +164,6 @@ Archive Explorer & Refresh (Mobile)
         <li>Permission Set removal + archiving</li>
       </ul>
     </div>
-
     <!-- Card 4: Secure Archiving -->
     <div style="background: linear-gradient(145deg, #161b22, #1a1e24); border: 1px solid #21262d; border-radius: 16px; padding: 24px; transition: all 0.3s ease; position: relative; overflow: hidden;">
       <div style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #8b5cf6, #a78bfa);"></div>
@@ -184,7 +180,6 @@ Archive Explorer & Refresh (Mobile)
         <li>Metadata-driven configuration</li>
       </ul>
     </div>
-
   </div>
 </div>
 
@@ -193,7 +188,6 @@ Archive Explorer & Refresh (Mobile)
   <h3 style="display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: #58a6ff; margin: 0 0 28px 0; padding-bottom: 16px; border-bottom: 2px solid #30363d; text-shadow: 0 2px 4px rgba(88,166,255,0.2);">🎯 Architect Skills Demonstrated</h3>
   
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-    
     <div style="display: flex; gap: 20px;">
       <div style="width: 4px; height: 100%; background: linear-gradient(180deg, #10b981, #34d399); border-radius: 2px;"></div>
       <div style="flex: 1; background: linear-gradient(145deg, #161b22, #1a1e24); border: 1px solid #21262d; border-radius: 16px; padding: 24px;">
@@ -201,7 +195,6 @@ Archive Explorer & Refresh (Mobile)
         <div style="font-size: 13px; color: #b1bac4; line-height: 1.6;">Complex scheduled processing & <strong>Mixed DML handling</strong></div>
       </div>
     </div>
-
     <div style="display: flex; gap: 20px;">
       <div style="width: 4px; height: 100%; background: linear-gradient(180deg, #ef4444, #f87171); border-radius: 2px;"></div>
       <div style="flex: 1; background: linear-gradient(145deg, #161b22, #1a1e24); border: 1px solid #21262d; border-radius: 16px; padding: 24px;">
@@ -209,7 +202,6 @@ Archive Explorer & Refresh (Mobile)
         <div style="font-size: 13px; color: #b1bac4; line-height: 1.6;">End-to-end automated user lifecycle</div>
       </div>
     </div>
-
     <div style="display: flex; gap: 20px;">
       <div style="width: 4px; height: 100%; background: linear-gradient(180deg, #f59e0b, #fbbf24); border-radius: 2px;"></div>
       <div style="flex: 1; background: linear-gradient(145deg, #161b22, #1a1e24); border: 1px solid #21262d; border-radius: 16px; padding: 24px;">
@@ -217,7 +209,6 @@ Archive Explorer & Refresh (Mobile)
         <div style="font-size: 13px; color: #b1bac4; line-height: 1.6;"><strong>OAuth 2.0</strong> + Named Credentials with Google Drive</div>
       </div>
     </div>
-
     <div style="display: flex; gap: 20px;">
       <div style="width: 4px; height: 100%; background: linear-gradient(180deg, #8b5cf6, #a78bfa); border-radius: 2px;"></div>
       <div style="flex: 1; background: linear-gradient(145deg, #161b22, #1a1e24); border: 1px solid #21262d; border-radius: 16px; padding: 24px;">
