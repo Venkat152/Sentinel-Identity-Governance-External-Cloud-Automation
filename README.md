@@ -34,6 +34,9 @@ Built **Sentinel** — a full **Zero-Trust Identity Governance** automation suit
 - Enabled faster user re-onboarding using permission set backups
 - Eliminated risk of stale accounts and unnecessary license usage
 
+## 🚀 Live Demo
+> **Live Portfolio**: https://ddm00000fpkymuan-dev-ed.develop.my.site.com/venkateshPortfolio/s
+
 ## ▶️ Watch Demo
 > **YouTube**: I will update soon ......
 
@@ -77,11 +80,26 @@ Sentinel-Identity-Governance/
 ├── force-app/
 │   ├── main/
 │   │   ├── default/
-│   │   │   ├── classes/               # Batch Class, Queueable, Service Layer, Controller, CSV Generator
-│   │   │   ├── triggers/              # Audit logging and user triggers
-│   │   │   ├── lwc/                   # Manager Portal, Bulk Actions & Google Drive Explorer
-│   │   │   ├── customMetadata/        # Configuration (Drive Folder ID, Named Credentials)
+│   │   │   ├── classes/              
+│   │   │   │       ├── CustomSettingAndMetaDataUtil
+│   │   │   │       ├── IdentityGovernanceService
+│   │   │   │       ├── SentinelGovernanceQueueable
+│   │   │   │       ├── UsersDeactivationAndNotificationBatch
+│   │   │   │       └── UserTriggerHandler         
+│   │   │   │  
+│   │   │   ├── triggers/                 
+│   │   │   │       └── UserTrigger  
+│   │   │   │           
+│   │   │   ├── lwc/              
+│   │   │   │       └──identityCommandCenter      
+│   │   │   │     
+│   │   │   ├── customMetadata/   # Configuration (Drive Folder ID, Named Credentials)
+│   │   │   │       ├── Govemance_Config.Default_Settings.md-meta.xml
+│   │   │   │       └── Sentinel_lntegration_Setting.Google_Drive_Default.md-meta.xml 
+│   │   │   │       
 │   │   │   ├── email/                 # Custom Email Templates
+│   │   │   │       ├── User_Deactivation_Template
+│   │   │   │       └── User_Expiry_15_Days_Template                
 │   │   │   ├── experiences/           # Experience Cloud (LWR) Site
 │   │   │   └── security/              # Permission Sets & Profiles
 │   └── ...
