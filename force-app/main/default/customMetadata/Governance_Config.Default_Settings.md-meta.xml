@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Default_Settings</label>
+    <protected>false</protected>
+    <values>
+        <field>Days_Before_Expiry__c</field>
+        <value xsi:type="xsd:double">14.0</value>
+    </values>
+    <values>
+        <field>OWA_Email_Id__c</field>
+        <value xsi:type="xsd:string">0D2gK00000026SjSAI</value>
+    </values>
+    <values>
+        <field>Target_Profiles__c</field>
+        <value xsi:type="xsd:string">System Administrator,Contract Manager,Minimum Access - Salesforce</value>
+    </values>
+</CustomMetadata>
