@@ -1,6 +1,6 @@
 /**
  * @description       : Utility class for custom settings and custom metadata
- * @author            : Nitish Kumar
+ * @author            : M venkatesh
  * @last modified on  : 03-31-2026
 **/
 public with sharing class CustomSettingAndMetaDataUtil {

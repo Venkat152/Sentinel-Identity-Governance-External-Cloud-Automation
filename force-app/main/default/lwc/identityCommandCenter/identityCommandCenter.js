@@ -23,11 +23,6 @@ const ARCHIVE_COLUMNS = [
         } 
     }
 ];
-// const ACTIONS = [
-//     { label: 'Reset Password', name: 'Password' },
-//     { label: 'Reset MFA', name: 'MFA' },
-//     { label: 'Backup & Purge Access', name: 'purge', iconName: 'utility:database' }
-// ];
 
 const COLUMNS = [
     { label: 'Name', fieldName: 'Name', type: 'text', sortable: true , hideDefaultActions: true},

@@ -278,7 +278,6 @@ public static void sendDeactivationEmailsSync(List<Id> userIds,String actionType
      * Sends a CSV string to the configured Google Drive folder
      */
     public static void uploadCSVToDrive(String fileName, String csvContent) {
-        // 1. Fetch Config from Metadata
         Sentinel_Integration_Setting__mdt config = Sentinel_Integration_Setting__mdt.getInstance(GOOGLE_DRIVE_INSTANCE);
         
         if(config == null) {
@@ -380,16 +379,6 @@ public static void sendDeactivationEmailsSync(List<Id> userIds,String actionType
                             userId,
                             Label.Permission_Purge_Action,
                             Label.Access_Purged_By_Manager + fileName
-                        )
-                    );
-                }
-
-                if (!logs.isEmpty()) {
-                    System.enqueueJob(
-                        new SentinelGovernanceQueueable(
-                            new List<Id>(),
-                            logs,
-                            ''
                         )
                     );
                 }

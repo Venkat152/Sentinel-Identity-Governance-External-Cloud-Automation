@@ -3,9 +3,7 @@ public with sharing class UsersDeactivationAndNotificationBatch implements Datab
     public enum EMAIL_TEMPLATE_NAME { USER_DEACTIVATION_TEMPLATE, USER_EXPIRY_14_DAYS_TEMPLATE }
     
     private static final String TODAY_DEACTIVATION_TEMPLATE =Label.User_InActive_Template;
-    private static final String ADVANCE_NOTIFY_TEMPLATE ='User_Expiry_14_Days_Template';
     private static final Integer BATCH_SIZE = 200;
-    private static Governance_Config__mdt CONFIG = CustomSettingAndMetaDataUtil.getGovernanceConfig();
     private static Date TODAY = Date.today();
     
     // Days offset from Metadata (defaults to 15 if null)
