@@ -51,7 +51,7 @@ Access Period    : {!IF(
 {!IF(
     ISBLANK(relatedTo.Jira_Ticket_Number__c),
     "",
-    "access Ticket Number     : " & relatedTo.Jira_Ticket_Number__c
+    "Access Ticket Number     : " & relatedTo.Jira_Ticket_Number__c
 )}
 
 Authorized Instance        : {!SUBSTITUTE(

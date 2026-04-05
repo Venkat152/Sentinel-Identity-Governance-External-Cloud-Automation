@@ -30,12 +30,28 @@ const ARCHIVE_COLUMNS = [
 // ];
 
 const COLUMNS = [
-    { label: 'Name', fieldName: 'Name', type: 'text' },
-    { label: 'Email', fieldName: 'Email', type: 'email' },
-    { label: 'Type', fieldName: 'Access_Type__c', type: 'text' },
-    { label: 'Status', fieldName: 'IsActive', type: 'boolean' },
-   // { type: 'action', typeAttributes: { rowActions: 'actions' } }
+    { label: 'Name', fieldName: 'Name', type: 'text', sortable: true , hideDefaultActions: true},
+    { label: 'Email', fieldName: 'Email', type: 'email', hideDefaultActions: true },
+    { label: 'Access Type', fieldName: 'AccessType', type: 'text', hideDefaultActions: true },
+    { label: 'Status', fieldName: 'IsActive', type: 'boolean', hideDefaultActions: true },
+    {
+        label: 'Permission Sets',
+        fieldName: 'PsetCount',
+        type: 'number',
+        cellAttributes: { alignment: 'left' },
+        sortable: true, hideDefaultActions: true
+    },
+    {
+        label: 'Remaining Days', 
+        fieldName: 'remainingDaysLabel', 
+        type: 'text',
+        hideDefaultActions: true,
+        sortable: true 
+    }
 ];
+
+
+
 
 export default class IdentityCommandCenter extends LightningElement {
     @track teamData;
@@ -59,14 +75,75 @@ export default class IdentityCommandCenter extends LightningElement {
     wiredArchivesResult;
     currentUserId = Id;
 
-    @wire(getMyTeam)
-    wiredTeam(result) {
-        this.wiredTeamResult = result;
-        if (result.data) {
-            this.teamData = result.data.map(row => ({ ...row, actions: this.getRowActions(row) }));
-            this.pageNumberTeam = 1; // Reset to first page when data refreshes
-        }
+    sortBy;
+sortDirection = 'asc';
+
+handleSort(event) {
+    const { fieldName, sortDirection } = event.detail;
+    this.sortBy = fieldName;
+    this.sortDirection = sortDirection;
+    this.sortData(fieldName, sortDirection);
+}
+
+sortData(fieldName, direction) {
+    let parseData = [...this.teamData];
+
+    let keyValue = (a) => {
+        return a[fieldName] ?? '';
+    };
+
+    let isReverse = direction === 'asc' ? 1 : -1;
+
+    parseData.sort((x, y) => {
+        let a = keyValue(x);
+        let b = keyValue(y);
+
+        if (typeof a === 'string') a = a.toLowerCase();
+        if (typeof b === 'string') b = b.toLowerCase();
+
+        return isReverse * ((a > b) - (b > a));
+    });
+
+    this.teamData = parseData;
+}
+
+
+@wire(getMyTeam)
+wiredTeam(result) {
+    this.wiredTeamResult = result;
+    if (result.data) {
+        console.log('Raw team data:', JSON.stringify(result.data, null, 2));
+        this.teamData = result.data.map(row => ({ 
+            ...row, 
+            actions: this.getRowActions(row),
+            remainingDaysLabel: this.formatRemainingDays(row.EndDate)  // Format here
+        }));
+        console.log('First row formatted:', this.teamData[0]);
+        this.pageNumberTeam = 1;
     }
+}
+
+// New method to format remaining days
+formatRemainingDays(endDate) {
+    if (!endDate) return 'No Date';
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize to start of day
+    
+    const end = new Date(endDate);
+    end.setHours(0, 0, 0, 0);
+    
+    const diffTime = end.getTime() - today.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) {
+        return 'Today';
+    } else if (diffDays > 0) {
+        return `${diffDays} Day${diffDays > 1 ? 's' : ''} to go`;
+    } else {
+        return `Expired ${Math.abs(diffDays)} Day${Math.abs(diffDays) > 1 ? 's' : ''} ago`;
+    }
+}
 
     // Logic to disable buttons if nothing is selected
     get isNoRowsSelected() {
@@ -83,9 +160,9 @@ export default class IdentityCommandCenter extends LightningElement {
         return this.selectedRows.length === 0 || !this.selectedRows.some(row => row.IsActive);
     }
 
-    // Disable purge only if no rows selected (works for active or inactive)
+    // Disable purge only if no rows selected or if all selected users have 0 permission sets
     get isPurgeDisabled() {
-        return this.selectedRows.length === 0;
+        return this.selectedRows.length === 0 || !this.selectedRows.some(row => row.PsetCount > 0);
     }
 
     // TEAM TABLE PAGINATION & SEARCH
@@ -224,18 +301,23 @@ export default class IdentityCommandCenter extends LightningElement {
     async handleBulkPurge() {
         this.isLoading = true;
         try {
-            // Loop through selected rows for the Google Drive callout
-            for (let user of this.selectedRows) {
-                await purgeAndBackupUser({ userId: user.Id });
-            }
+            const userIds = this.selectedRows.map(row => row.Id);
+
+            await purgeAndBackupUser({ userIds : userIds });
+
             this.showToast('Success', 'Backup and Purge completed for selected users.', 'success');
-            return refreshApex(this.wiredTeamResult);
+            await refreshApex(this.wiredTeamResult);
         } catch (error) {
-            this.showToast('Error', error.body.message, 'error');
+            const message =
+                error?.body?.message ||
+                error?.message ||
+                'Unknown error occurred';
+            this.showToast('Error', message, 'error');
         } finally {
             this.isLoading = false;
         }
     }
+
 
     // Helper for Credential Resets (Handles multiple IDs in one Apex call)
     async processBulkCredential(userIds, type) {
@@ -251,28 +333,6 @@ export default class IdentityCommandCenter extends LightningElement {
         }
     }
 
-    // --- SINGLE ROW ACTION HANDLER ---
-
-    async handleRowAction(event) {
-        const actionName = event.detail.action.name;
-        const row = event.detail.row;
-        this.isLoading = true;
-
-        try {
-            if (actionName === 'purge') {
-                const msg = await purgeAndBackupUser({ userId: row.Id });
-                this.showToast('Success', msg, 'success');
-            } else {
-                await performCredentialReset({ userIds: [row.Id], resetType: actionName });
-                this.showToast('Success', `${actionName} reset successful for ${row.Name}`, 'success');
-            }
-            return refreshApex(this.wiredTeamResult);
-        } catch (error) {
-            this.showToast('Error', error.body.message, 'error');
-        } finally {
-            this.isLoading = false;
-        }
-    }
 
     // --- BATCH METHODS ---
 

@@ -11,6 +11,10 @@
         <value xsi:type="xsd:string">1jU3ZwGmIfHv8KWvW8j7HfCm9O1Q-1B8R</value>
     </values>
     <values>
+        <field>HTTP_Method__c</field>
+        <value xsi:type="xsd:string">POST</value>
+    </values>
+    <values>
         <field>Mime_Type__c</field>
         <value xsi:type="xsd:string">text/csv</value>
     </values>

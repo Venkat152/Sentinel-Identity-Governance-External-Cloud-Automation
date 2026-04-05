@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Access_Purged_By_Manager</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Message for access purged by manager</shortDescription>
+        <value>Access purged by Manager. Backup file created:</value>
+    </labels>
+    <labels>
+        <fullName>Auto_Deactivation_Action</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Action label for auto deactivation</shortDescription>
+        <value>Auto-Deactivation</value>
+    </labels>
+    <labels>
+        <fullName>Automated_Deactivation_Notes</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Notes for automated deactivation</shortDescription>
+        <value>Automated deactivation performed by Sentinel Identity Sync due to End Date reached or Inactivity</value>
+    </labels>
+    <labels>
+        <fullName>Expiry_Email_Note</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Expiry email warning alert</shortDescription>
+        <value>-day expiry warning email triggered.</value>
+    </labels>
+    <labels>
+        <fullName>Expiry_Warning_Notes</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Notes for expiry warning email triggered</shortDescription>
+        <value>{0}-day expiry warning email triggered.</value>
+    </labels>
+    <labels>
+        <fullName>GoogleD_Fetch_Error</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Message for failed Google Drive fetch</shortDescription>
+        <value>Error fetching from Google Drive:</value>
+    </labels>
+    <labels>
+        <fullName>GoogleD_Upload_Failed</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Message for failed Google Drive upload</shortDescription>
+        <value>Google Drive Upload Failed:</value>
+    </labels>
+    <labels>
+        <fullName>Identity_Sync_Running</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Message for identity sync running</shortDescription>
+        <value>Identity Sync is already running. Please check back in a few minutes.</value>
+    </labels>
+    <labels>
+        <fullName>Manual_Action_Notes</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Notes for manual actions</shortDescription>
+        <value>Manual action triggered via Manager Governance Portal.</value>
+    </labels>
+    <labels>
+        <fullName>Manual_Deactivation_Action</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Action label for manual deactivation</shortDescription>
+        <value>Manual Deactivation</value>
+    </labels>
+    <labels>
+        <fullName>Manual_Deactivation_Notes</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Notes for manual deactivation</shortDescription>
+        <value>Manual deactivation performed by Manager via Governance Portal or Security Compliance Team</value>
+    </labels>
+    <labels>
+        <fullName>Metadata_Configuration_Missing</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Message for missing metadata configuration</shortDescription>
+        <value>Sentinel Metadata configuration is missing.</value>
+    </labels>
+    <labels>
+        <fullName>No_Custom_Permission_Sets_Found</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Message for no custom permission sets found</shortDescription>
+        <value>No custom permission sets found for this user.</value>
+    </labels>
+    <labels>
+        <fullName>Notification_Sent_Action</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Action label for notification sent</shortDescription>
+        <value>Notification Sent</value>
+    </labels>
+    <labels>
+        <fullName>Notification_Status</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Notification sent in BatchApex</shortDescription>
+        <value>Notification Sent</value>
+    </labels>
+    <labels>
+        <fullName>Permission_Purge_Action</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Label for permission purge action</shortDescription>
+        <value>Permission Purge</value>
+    </labels>
+    <labels>
+        <fullName>Permissions_Backed_Up_Successfully</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Message for successful permission backup</shortDescription>
+        <value>Success: Permissions backed up to Google Drive and removed from Salesforce.</value>
+    </labels>
+    <labels>
+        <fullName>User_Deactivation_Notes</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Notes for user deactivation log</shortDescription>
+        <value>User deactivated by Sentinel Batch based on End Date.</value>
+    </labels>
+    <labels>
+        <fullName>User_InActive_Template</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Email template for user deactivation</shortDescription>
+        <value>User_Deactivation_Template</value>
+    </labels>
+    <labels>
+        <fullName>User_Permission_Sets_Export_Template</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Template for user permission sets export</shortDescription>
+        <value>User_Name,User_Email,Permission_Set_API_Name,Permission_Set_Label</value>
+    </labels>
+    <labels>
+        <fullName>fallback_sender</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Fallback sender display name for emails</shortDescription>
+        <value>Sentinel Identity Support</value>
+    </labels>
+</CustomLabels>

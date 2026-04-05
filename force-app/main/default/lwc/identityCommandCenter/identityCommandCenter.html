@@ -52,9 +52,12 @@
                             key-field="Id"
                             data={paginatedTeamData}
                             columns={columns}
-                            onrowselection={handleRowSelection}
-                            onrowaction={handleRowAction}>
+                            sorted-by={sortBy}
+                            sorted-direction={sortDirection}
+                            onsort={handleSort}
+                            onrowselection={handleRowSelection}>
                         </lightning-datatable>
+
 
                         <!-- Pagination Controls -->
                         <div class="slds-m-top_medium">

@@ -1,4 +1,4 @@
-<messaging:emailTemplate subject="Action Required: Salesforce Access Deactivation in 14 Days"
+<messaging:emailTemplate subject="Action Required: Salesforce Access Deactivation in 15 Days"
     recipientType="User"
     relatedToType="User"
     language="en_US">
@@ -7,7 +7,7 @@
     <apex:outputText value="{!relatedTo.Access_Type__c}{!relatedTo.Start_Date__c}{!relatedTo.End_Date__c}{!relatedTo.Jira_Ticket_Number__c}" rendered="false" />
 Hello {!recipient.Name},
 
-This is an automated reminder that your Salesforce access is scheduled to be deactivated in 14 days. 
+This is an automated reminder that your Salesforce access is scheduled to be deactivated in 15 days. 
 
 If you require continued access or believe this is in error, please contact your supervisor or submit a renewal request before the deactivation date.
 
@@ -49,7 +49,7 @@ Access Period    : {!IF(
 {!IF(
     ISBLANK(relatedTo.Jira_Ticket_Number__c),
     "",
-    "access Ticket Number     : " & relatedTo.Jira_Ticket_Number__c
+    "Access Ticket Number     : " & relatedTo.Jira_Ticket_Number__c
 )}
 
 Authorized Instance        : {!SUBSTITUTE(

@@ -4,13 +4,14 @@
  * @last modified on  : 03-31-2026
 **/
 public with sharing class CustomSettingAndMetaDataUtil {
+
+    public static final String GOVERNANCE_CONFIG_NAME = 'Default_Settings';
     
     /**
      * Fetches the Governance Metadata record. 
-     * Using 'Default_Settings' as the developer name.
      */
     public static Governance_Config__mdt getGovernanceConfig() {
-        return Governance_Config__mdt.getInstance('Default_Settings');
+        return Governance_Config__mdt.getInstance(GOVERNANCE_CONFIG_NAME);
     }
 
     /**

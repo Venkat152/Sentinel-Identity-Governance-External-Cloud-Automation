@@ -4,10 +4,19 @@
  */
 public with sharing class UserTriggerHandler {
 
+    public static void handlerBeforeInsert(List<User> newLIst){
+        for(User u: newLIst){
+            if(u.IsActive==true && u.Start_Date__c ==null){
+                u.Start_Date__c = Date.today();
+            }
+        }
+    }
+    
     /**
-     * BEFORE UPDATE LOGIC
-     * Ensures End_Date__c is populated if a user is deactivated.
+     * Handles automatic setting of End_Date__c when a user is deactivated manually.
+     * This ensures that the batch process can identify these users for proper logging and notifications.
      */
+    
     public static void handleBeforeUpdate(List<User> newList, Map<Id, User> oldMap) {
         for (User u : newList) {
             User oldUser = oldMap.get(u.Id);
@@ -20,11 +29,11 @@ public with sharing class UserTriggerHandler {
     }
 
     /**
-     * AFTER UPDATE LOGIC
      * Handles Notifications and Audit Logging.
      */
         public static void handleAfterUpdate(List<User> newList, Map<Id, User> oldMap) {
             List<Id> deactivatedUserIds = new List<Id>();
+
             // 1. Only identify users deactivated manually
             for (User u : newList) {
                 User oldUser = oldMap.get(u.Id);
@@ -32,9 +41,8 @@ public with sharing class UserTriggerHandler {
                     deactivatedUserIds.add(u.Id);
                 }
             }
-            // (Because the Batch method above is already handling the Queueable)
             if (!deactivatedUserIds.isEmpty() && !System.isBatch()) {
-                System.enqueueJob(new SentinelGovernanceQueueable(deactivatedUserIds, new List<Access_Audit_Log__c>(), 'Manual Deactivation'));
+                System.enqueueJob(new SentinelGovernanceQueueable(deactivatedUserIds, new List<Access_Audit_Log__c>(), Label.Manual_Deactivation_Action));
             }
         }
 }

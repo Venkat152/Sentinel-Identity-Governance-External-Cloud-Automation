@@ -13,13 +13,12 @@
             <value>
                 <fullName>Auto-Deactivation</fullName>
                 <default>false</default>
-                <isActive>false</isActive>
                 <label>Auto-Deactivation</label>
             </value>
             <value>
-                <fullName>Deactivation</fullName>
+                <fullName>Manual Deactivation</fullName>
                 <default>false</default>
-                <label>Deactivation</label>
+                <label>Manual Deactivation</label>
             </value>
             <value>
                 <fullName>MFA Reset</fullName>
@@ -27,20 +26,19 @@
                 <label>MFA Reset</label>
             </value>
             <value>
-                <fullName>Notification</fullName>
-                <default>false</default>
-                <label>Notification</label>
-            </value>
-            <value>
                 <fullName>Notification Sent</fullName>
                 <default>false</default>
-                <isActive>false</isActive>
                 <label>Notification Sent</label>
             </value>
             <value>
                 <fullName>Password Reset</fullName>
                 <default>false</default>
                 <label>Password Reset</label>
+            </value>
+            <value>
+                <fullName>Permission Purge</fullName>
+                <default>false</default>
+                <label>Permission Purge</label>
             </value>
         </valueSetDefinition>
     </valueSet>

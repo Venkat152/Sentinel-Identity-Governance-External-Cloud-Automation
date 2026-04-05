@@ -155,9 +155,10 @@
     <externalSharingModel>Private</externalSharingModel>
     <label>Access Audit Log</label>
     <nameField>
+        <displayFormat>Audit-{00000}</displayFormat>
         <label>Access Audit Log Name</label>
         <trackHistory>false</trackHistory>
-        <type>Text</type>
+        <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Access Audit Logs</pluralLabel>
     <searchLayouts></searchLayouts>

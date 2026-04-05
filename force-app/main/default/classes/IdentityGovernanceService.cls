@@ -6,19 +6,18 @@
  */
 public with sharing class IdentityGovernanceService {
     
+private static final String GOOGLE_DRIVE_INSTANCE ='Google_Drive_Default';
 @AuraEnabled(cacheable=true)
 public static List<FileWrapper> getGoogleDriveFiles() {
     List<FileWrapper> fileList = new List<FileWrapper>();
     
-    Sentinel_Integration_Setting__mdt config = Sentinel_Integration_Setting__mdt.getInstance('Google_Drive_Default');
+    Sentinel_Integration_Setting__mdt config = Sentinel_Integration_Setting__mdt.getInstance(GOOGLE_DRIVE_INSTANCE);
     
     if(config == null) {
-        throw new CalloutException('Sentinel Metadata configuration is missing.');
+        throw new CalloutException(Label.Metadata_Configuration_Missing);
     }
     
-    // THE FIX: 
-    // 1. 'trashed = false' ignores deleted files.
-    // 2. ''Folder_ID' in parents' restricts it to your specific Sentinel folder.
+    // ''Folder_ID' in parents' restricts it to your specific Sentinel folder.
     String query = 'name contains \'Backup_\' AND trashed = false';
     
     if(String.isNotBlank(config.Folder_ID__c)) {
@@ -51,7 +50,7 @@ public static List<FileWrapper> getGoogleDriveFiles() {
             }
         }
     } catch (Exception e) {
-        throw new AuraHandledException('Drive Fetch Error: ' + e.getMessage());
+        throw new AuraHandledException(Label.GoogleD_Fetch_Error + e.getMessage());
     }
     return fileList;
 }
@@ -67,17 +66,14 @@ public class FileWrapper {
     }
 }
 
-    /**
-     * Performs bulk password or MFA resets and logs the action.
-     * Used primarily by the Experience Site LWC.
-     */
+
 @AuraEnabled
 public static void performCredentialReset(List<Id> userIds, String resetType) {
     if (userIds == null || userIds.isEmpty()) return;
 
     List<User> usersToUpdate = new List<User>();
     List<Access_Audit_Log__c> auditLogs = new List<Access_Audit_Log__c>();
-    String notes = 'Manual action triggered via Manager Governance Portal.';
+    String notes = Label.Manual_Action_Notes;
 
     // 1. PERFORM SETUP OPERATIONS (User Update, MFA, Password)
     for (Id uId : userIds) {
@@ -88,7 +84,6 @@ public static void performCredentialReset(List<Id> userIds, String resetType) {
         else if (resetType == 'MFA') {
             try {
                 System.UserManagement.deregisterVerificationMethod(uId, Auth.VerificationMethod.SALESFORCE_AUTHENTICATOR);
-                System.UserManagement.deregisterVerificationMethod(uId, Auth.VerificationMethod.SMS);
                 System.UserManagement.deregisterVerificationMethod(uId, Auth.VerificationMethod.U2F);
                 auditLogs.add(createLogRecord(uId, 'MFA Reset', 'MFA Methods Deregistered: ' + notes));
             } catch (Exception e) {
@@ -105,7 +100,6 @@ public static void performCredentialReset(List<Id> userIds, String resetType) {
     }
 
     // 2. ENQUEUE NON-SETUP OPERATIONS (Audit Logs)
-    // We send the logs to the Queueable to run in a NEW transaction context.
     if (!auditLogs.isEmpty()) {
         System.enqueueJob(new SentinelGovernanceQueueable(userIds, auditLogs, resetType));
     }
@@ -149,11 +143,6 @@ public static void performCredentialReset(List<Id> userIds, String resetType) {
             mail.setTargetObjectId(u.Id);
             mail.setSaveAsActivity(false);
             
-            // Set CC to Manager if available
-            // if (u.ManagerId != null && String.isNotBlank(u.Manager.Email)) {
-            //     mail.setCcAddresses(new List<String>{ u.Manager.Email });
-            // }
-
             if (String.isNotBlank(owaId)) {
                 mail.setOrgWideEmailAddressId(owaId);
             }
@@ -172,6 +161,7 @@ public static void performCredentialReset(List<Id> userIds, String resetType) {
  */
 public static void sendDeactivationEmailsSync(List<Id> userIds,String actionType) {
     if (userIds == null || userIds.isEmpty()) return;
+    String Notes ='';
 
     try {
         List<User> users = [
@@ -190,21 +180,21 @@ public static void sendDeactivationEmailsSync(List<Id> userIds,String actionType
 
         EmailTemplate et;
         try {
-            et = [SELECT Id FROM EmailTemplate WHERE DeveloperName = 'User_Deactivation_Template' LIMIT 1];
+            et = [SELECT Id FROM EmailTemplate WHERE DeveloperName = :Label.User_InActive_Template LIMIT 1];
         } catch (QueryException e) {
             System.debug('CRITICAL: Email Template "User_Deactivation_Template" not found.');
             return; 
         }
 
-        for (User u : users) {
-            // 1. Log creation remains the same
-            auditLogs.add(new Access_Audit_Log__c(
-                Target_User__c = u.Id,
-                Action__c = actionType,
-                Performed_By__c = UserInfo.getUserId(),
-                Notes__c = 'Async deactivation process started.'
-            ));
+        if(actionType==Label.Manual_Deactivation_Action){
+            Notes=Label.Manual_Deactivation_Notes;
+        }else if(actionType==Label.Auto_Deactivation_Action){
+            Notes=Label.Automated_Deactivation_Notes;
+        }
 
+        for (User u : users) {
+            
+           auditLogs.add(createLogRecord(u.Id,actionType,Notes));
             Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
             mail.setTemplateId(et.Id);
             mail.setTargetObjectId(u.Id);
@@ -216,10 +206,10 @@ public static void sendDeactivationEmailsSync(List<Id> userIds,String actionType
                     mail.setOrgWideEmailAddressId(owaId);
                 } catch(Exception e) {
                     System.debug('OWA ID invalid or not verified. Falling back to Display Name.');
-                    mail.setSenderDisplayName('Sentinel Identity Support');
+                    mail.setSenderDisplayName(Label.fallback_sender);
                 }
             } else {
-                mail.setSenderDisplayName('Sentinel Identity Support');
+                mail.setSenderDisplayName(Label.fallback_sender);
             }
             
             emails.add(mail);
@@ -232,8 +222,7 @@ public static void sendDeactivationEmailsSync(List<Id> userIds,String actionType
         if (!emails.isEmpty()) {
             /**
              * CHANGE 2: CAPTURE SEND RESULTS
-             * We change the second parameter to 'false' to allow partial success 
-             * and capture the specific error message from the mail server.
+
              */
             Messaging.SendEmailResult[] results = Messaging.sendEmail(emails, false);
             
@@ -257,7 +246,6 @@ public static void sendDeactivationEmailsSync(List<Id> userIds,String actionType
      */
     @AuraEnabled
     public static Id runComplianceBatch() {
-        // 20-Year Vet Tip: Always check if the job is already in flight
         List<AsyncApexJob> activeJobs = [
             SELECT Id FROM AsyncApexJob 
             WHERE JobType = 'BatchApex' 
@@ -271,12 +259,11 @@ public static void sendDeactivationEmailsSync(List<Id> userIds,String actionType
             UsersDeactivationAndNotificationBatch batchInstance = new UsersDeactivationAndNotificationBatch();
             return Database.executeBatch(batchInstance, 200);
         } else {
-            throw new AuraHandledException('Identity Sync is already running. Please check back in a few minutes.');
+            throw new AuraHandledException(Label.Identity_Sync_Running);
         }
     }
 
     /**
-     * BATCH STATUS CHECKER
      * Allows the LWC to poll for the status of a manually started job.
      */
     @AuraEnabled(cacheable=false)
@@ -288,19 +275,17 @@ public static void sendDeactivationEmailsSync(List<Id> userIds,String actionType
     }
 
     /**
-     * STAGE 3 & 6: Unified Upload Method
      * Sends a CSV string to the configured Google Drive folder
      */
     public static void uploadCSVToDrive(String fileName, String csvContent) {
         // 1. Fetch Config from Metadata
-        // We use 'Google_Drive_Default' which you created in Stage 2
-        Sentinel_Integration_Setting__mdt config = Sentinel_Integration_Setting__mdt.getInstance('Google_Drive_Default');
+        Sentinel_Integration_Setting__mdt config = Sentinel_Integration_Setting__mdt.getInstance(GOOGLE_DRIVE_INSTANCE);
         
         if(config == null) {
-            throw new CalloutException('Sentinel Metadata configuration is missing.');
+            throw new CalloutException(Label.Metadata_Configuration_Missing);
         }
 
-        // 2. Build the Multipart Body (Google's requirement)
+        // 2. Build the Multipart Body
         String boundary = 'sentinel_boundary_' + DateTime.now().getTime();
         String body = '--' + boundary + '\r\n' +
             'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
@@ -316,9 +301,8 @@ public static void sendDeactivationEmailsSync(List<Id> userIds,String actionType
 
         // 3. Setup the Request using the Named Credential
         HttpRequest req = new HttpRequest();
-        // Uses the 'callout:' prefix + the Named Credential name from Metadata
         req.setEndpoint('callout:' + config.Named_Credential__c + config.Endpoint__c);
-        req.setMethod('POST');
+        req.setMethod(config.HTTP_Method__c);
         req.setHeader('Content-Type', 'multipart/related; boundary=' + boundary);
         req.setBody(body);
         req.setTimeout(60000);
@@ -328,77 +312,168 @@ public static void sendDeactivationEmailsSync(List<Id> userIds,String actionType
         HttpResponse res = http.send(req);
 
         if (res.getStatusCode() != 200 && res.getStatusCode() != 201) {
-            throw new CalloutException('Google Drive Upload Failed: ' + res.getBody());
+            throw new CalloutException(Label.GoogleD_Upload_Failed + res.getBody());
         }
     }
 
-    /**
-     * STAGE 6.1: Fetch Team Members for the Manager
-     * Shows only inactive users or those nearing expiry
-     */
-    @AuraEnabled(cacheable=true)
-    public static List<User> getMyTeam() {
-        return [
-            SELECT Id, Name, Email, End_Date__c, IsActive, Access_Type__c
-            FROM User 
-            WHERE ManagerId = :UserInfo.getUserId()
-            AND (IsActive = false OR End_Date__c <= NEXT_N_DAYS:14)
-            ORDER BY End_Date__c DESC
-        ];
-    }
 
-    /**
-     * STAGE 6.2: The "Purge & Backup" Action
+        /**
      * This calls your Google Drive service and cleans up permissions
      */
-    @AuraEnabled
-    public static String purgeAndBackupUser(Id userId) {
-        try {
-            // 1. Get User Info for the CSV
-            User targetUser = [SELECT Name, Email FROM User WHERE Id = :userId LIMIT 1];
-            
-            // 2. Get Permission Sets
-            List<PermissionSetAssignment> psaList = [
-                SELECT PermissionSet.Name, PermissionSet.Label 
-                FROM PermissionSetAssignment 
-                WHERE AssigneeId = :userId 
-                AND PermissionSet.IsOwnedByProfile = false
-            ];
+        @AuraEnabled
+        public static String purgeAndBackupUser(List<Id> userIds) {
+            try {
+                if (userIds == null || userIds.isEmpty()) {
+                    AuraHandledException ex = new AuraHandledException('No users selected.');
+                    ex.setMessage('No users selected.');
+                    throw ex;
+                }
 
-            if(psaList.isEmpty()) {
-                return 'No custom permission sets found for this user.';
+                List<User> targetUsers = [
+                    SELECT Id, Name, Email
+                    FROM User
+                    WHERE Id IN :userIds
+                ];
+                Map<Id, User> userMap = new Map<Id, User>(targetUsers);
+
+                List<PermissionSetAssignment> psaList = [
+                    SELECT Id, AssigneeId, PermissionSet.Name, PermissionSet.Label
+                    FROM PermissionSetAssignment
+                    WHERE AssigneeId IN :userIds
+                    AND PermissionSet.IsOwnedByProfile = false
+                ];
+
+                if (psaList.isEmpty()) {
+                    return Label.No_Custom_Permission_Sets_Found;
+                }
+
+                List<String> csvLines = new List<String>();
+                Set<Id> usersWithAssignments = new Set<Id>();
+
+                for (PermissionSetAssignment psa : psaList) {
+                    User u = userMap.get(psa.AssigneeId);
+                    if (u != null) {
+                        usersWithAssignments.add(u.Id);
+                        csvLines.add(
+                            escapeCsv(u.Name) + ',' +
+                            escapeCsv(u.Email) + ',' +
+                            escapeCsv(psa.PermissionSet.Name) + ',' +
+                            escapeCsv(psa.PermissionSet.Label)
+                        );
+                    }
+                }
+
+                String csvHeader = Label.User_Permission_Sets_Export_Template;
+                String fullCsv = csvHeader + '\n' + String.join(csvLines, '\n') + '\n';
+
+                String timestamp = Datetime.now().format('yyyy-MM-dd_HH-mm-ss');
+                String fileName = 'Backup_Psets_' + timestamp + '.csv';
+
+                uploadCSVToDrive(fileName, fullCsv);
+
+                delete psaList;
+
+                List<Access_Audit_Log__c> logs = new List<Access_Audit_Log__c>();
+                for (Id userId : usersWithAssignments) {
+                    logs.add(
+                        createLogRecord(
+                            userId,
+                            Label.Permission_Purge_Action,
+                            Label.Access_Purged_By_Manager + fileName
+                        )
+                    );
+                }
+
+                if (!logs.isEmpty()) {
+                    System.enqueueJob(
+                        new SentinelGovernanceQueueable(
+                            new List<Id>(),
+                            logs,
+                            ''
+                        )
+                    );
+                }
+
+                return Label.Permissions_Backed_Up_Successfully;
+
+            } catch (Exception e) {
+                AuraHandledException ex = new AuraHandledException('Error during purge: ' + e.getMessage());
+                ex.setMessage('Error during purge: ' + e.getMessage());
+                throw ex;
             }
+        }
 
-            // 3. Generate CSV Content
-            String csvHeader = 'User_Name,User_Email,Permission_Set_API_Name,Permission_Set_Label\n';
-            String csvRows = '';
-            for(PermissionSetAssignment psa : psaList) {
-                csvRows += targetUser.Name + ',' + targetUser.Email + ',' + 
-                           psa.PermissionSet.Name + ',' + psa.PermissionSet.Label + '\n';
+        private static String escapeCsv(String value) {
+            if (String.isBlank(value)) {
+                return '';
             }
-            String fullCsv = csvHeader + csvRows;
+            String escaped = value.replace('"', '""');
+            return '"' + escaped + '"';
+        }
 
-            // 4. CALLOUT: Send to Google Drive (Using the service we tested)
-            // Generates a filename like: Backup_John_Doe_2026-04-03_14-30-05.csv
-            String timestamp = DateTime.now().format('yyyy-MM-dd_HH-mm-ss');
-            String fileName = 'Backup_' + targetUser.Name.replaceAll(' ', '_') + '_' + timestamp + '.csv';            // Note: In a real LWC, callouts must happen before DML
-            uploadCSVToDrive(fileName, fullCsv); 
+@AuraEnabled(cacheable=true)
+public static List<UserTeamWrapper> getMyTeam() {
+    List<User> users = [
+        SELECT Id, Name, Email, End_Date__c, IsActive, Access_Type__c
+        FROM User
+        WHERE Manager__c = :UserInfo.getUserId()
+        ORDER BY End_Date__c DESC
+    ];
 
-            // 5. DML: Delete Assignments
-            delete psaList;
+    Map<Id, Integer> customPsetCountMap = new Map<Id, Integer>();
+    List<Id> userIds = new List<Id>();
 
-            // 6. ASYNC DML: Create Audit Log (To avoid Mixed DML)
-            Access_Audit_Log__c log = new Access_Audit_Log__c(
-                Target_User__c = userId,
-                Action__c = 'Permission Purge',
-                Notes__c = 'Access purged by Manager. Backup file created: ' + fileName
+    for (User u : users) {
+        userIds.add(u.Id);
+    }
+
+    if (!userIds.isEmpty()) {
+        List<AggregateResult> psetCounts = [
+            SELECT AssigneeId, COUNT(Id) psetCount
+            FROM PermissionSetAssignment
+            WHERE AssigneeId IN :userIds
+            AND PermissionSet.IsOwnedByProfile = false  // Only custom permission sets
+            GROUP BY AssigneeId
+        ];
+
+        for (AggregateResult ar : psetCounts) {
+            customPsetCountMap.put(
+                (Id) ar.get('AssigneeId'),
+                (Integer) ar.get('psetCount')
             );
-            System.enqueueJob(new SentinelGovernanceQueueable(new List<Id>(),new List<Access_Audit_Log__c>{log},''));
-
-            return 'Success: Permissions backed up to Google Drive and removed from Salesforce.';
-
-        } catch (Exception e) {
-            throw new AuraHandledException('Error during purge: ' + e.getMessage());
         }
     }
+
+    List<UserTeamWrapper> teamWrappers = new List<UserTeamWrapper>();
+    for (User u : users) {
+        Integer psetCount = customPsetCountMap.containsKey(u.Id) 
+            ? customPsetCountMap.get(u.Id) 
+            : 0;
+        teamWrappers.add(new UserTeamWrapper(u, psetCount));
+    }
+
+    return teamWrappers;
+}
+public class UserTeamWrapper {
+    @AuraEnabled public Id Id;
+    @AuraEnabled public String Name;
+    @AuraEnabled public String Email;
+    @AuraEnabled public Date EndDate; 
+    @AuraEnabled public Boolean IsActive;
+    @AuraEnabled public String AccessType;
+    @AuraEnabled public Integer PsetCount;
+
+    public UserTeamWrapper(User u, Integer psetCount) {
+        this.Id = u.Id;
+        this.Name = u.Name;
+        this.Email = u.Email;
+        this.EndDate = u.End_Date__c;  
+        this.IsActive = u.IsActive;
+        this.AccessType = u.Access_Type__c;
+        this.PsetCount = psetCount;
+    }
+}
+
+
+
 }

@@ -12,6 +12,6 @@
     </values>
     <values>
         <field>Target_Profiles__c</field>
-        <value xsi:type="xsd:string">System Administrator,Contract Manager,Minimum Access - Salesforce</value>
+        <value xsi:type="xsd:string">System Administrator,Contract Manager,Minimum Access - Salesforce,Standard Platform User</value>
     </values>
 </CustomMetadata>
