@@ -134,20 +134,22 @@ Sentinel-Identity-Governance/
 
 <img src="screenshots/excel_file.png" alt="Excel File">
 
+5. Manual Batch Trigger from UI
+<img src="screenshots/batch.png" alt="Google Drive Archive">
 
-4. Daily Batch Execution Logs & Audit Records
+6. Daily Batch Execution Logs & Audit Records
 <img src="screenshots/logs.png" alt="Batch Logs">
 
 <img src="screenshots/audit_logs.png" alt="Audit Logs">
 
-5. Custom Email Templates (Deactivation & Reminder)
+7. Custom Email Templates (Deactivation & Reminder)
    1. Reminder Email Sample
 <img src="screenshots/advance_notification.png" alt="advance notification">
 
    2. Deactivation Email Sample
   <img src="screenshots/deactivation.png" alt="deactivation">
 
-6. Custom Metadata Configuration Screen
+8. Custom Metadata Configuration Screen
 <img src="screenshots/custom_metadata.png" alt="Configuration">
 
 
