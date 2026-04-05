@@ -34,7 +34,7 @@ In large Salesforce orgs, managing user access lifecycle is largely manual, risk
 - Faster user re-onboarding using permission set backups
 - Eliminated stale accounts and unnecessary license consumption
 
-### 💻 Tech Stack & Core Competencies
+### 💻 Tech Stack & Core Competencies  
 
 | Domain | Technologies & Frameworks |
 | :--- | :--- |
