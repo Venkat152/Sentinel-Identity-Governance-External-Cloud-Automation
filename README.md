@@ -48,7 +48,7 @@ In large Salesforce orgs, managing user access lifecycle is largely manual, risk
 
 ## 🚀 Live Demo 
   use Desktop view for better Experience
-> **Live Portfolio**: https://orgfarm-2bf8513f81-dev-ed.develop.my.site.com/IAMtool
+> **Live Portfolio**: https://github.com/Venkat152/Sentinel-Identity-Governance-External-Cloud-Automation.git
 
 
 ## ▶️ Watch Demo
